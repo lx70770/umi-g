@@ -4,5 +4,6 @@ module.exports = {
   rules: {
     // your rules
     semi: ['error', 'never'],
+    'no-plusplus': 0,
   },
 }
