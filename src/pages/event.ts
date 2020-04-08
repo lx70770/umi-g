@@ -1,6 +1,10 @@
 import { Canvas } from '@antv/g-canvas'
 
-export default function initEvent(canvas: Canvas, interval: number) {
+export default function initEvent(
+  canvas: Canvas,
+  onSliderChange: Function,
+  interval: number,
+) {
   const leftHandlerX = 120
   const rightHandlerX = 320
 
@@ -31,6 +35,13 @@ export default function initEvent(canvas: Canvas, interval: number) {
     })
 
     // eslint-disable-next-line no-inner-declarations
+    function callBack() {
+      const leftX = leftHandler.attr('x')
+      const rightX = rightHandler.attr('x')
+      onSliderChange(leftX, rightX)
+    }
+
+    // eslint-disable-next-line no-inner-declarations
     function leftMouseMove(ev: MouseEvent): void {
       const { x } = ev
       const leftX = leftHandler.attr('x')
@@ -41,6 +52,7 @@ export default function initEvent(canvas: Canvas, interval: number) {
         leftHandler.attr('x', x)
         rightHandler.attr('x', x + interval)
       }
+      callBack()
     }
 
     // eslint-disable-next-line no-inner-declarations
@@ -54,6 +66,7 @@ export default function initEvent(canvas: Canvas, interval: number) {
         rightHandler.attr('x', x)
         leftHandler.attr('x', x - interval)
       }
+      callBack()
     }
 
     leftHandler.on('mousedown', (ev: MouseEvent): void => {

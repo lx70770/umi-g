@@ -9,6 +9,12 @@ interface AppProps {
   wrapRef: {
     current: HTMLDivElement
   }
+  // onSliderChange: Function
+}
+
+function onSliderChange(left: number, right: number) {
+  console.log('left', left)
+  console.log('right', right)
 }
 
 // let { height, width, bgColor, strokeColor } = config
@@ -36,7 +42,7 @@ const App: SFC<AppProps> = props => {
         width,
         height,
       })
-      drawScale(canvas as any)
+      drawScale(canvas as any, onSliderChange)
     }
     return () => {
       canvas = null

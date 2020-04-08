@@ -9,7 +9,7 @@ interface CanvasCfg extends Canvas {
   }
 }
 
-export function drawScale(canvas: CanvasCfg): void {
+export function drawScale(canvas: CanvasCfg, onSliderChange: Function): void {
   const { cfg } = canvas
   const { height, width } = cfg
 
@@ -75,5 +75,5 @@ export function drawScale(canvas: CanvasCfg): void {
 
   // 画handler 图片链接 https://gw.alipayobjects.com/zos/rmsportal/QXtfhORGlDuRvLXFzpsQ.png
 
-  initEvent(canvas, interval)
+  initEvent(canvas, onSliderChange, interval)
 }
