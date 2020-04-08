@@ -29,7 +29,7 @@ const App: SFC<AppProps> = props => {
       const width = wrapRef.current.offsetWidth
       canvas.changeSize(width, height)
       canvas.clear()
-      drawScale(canvas as any)
+      drawScale(canvas as any, onSliderChange)
     }
   }
 
