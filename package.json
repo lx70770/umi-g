@@ -1,8 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "start": "umi dev",
-    "build": "umi build",
+    "start": "cd examples && umi dev",
+    "build": "father build",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
     "test": "umi-test",
     "test:coverage": "umi-test --coverage"
@@ -22,7 +22,9 @@
     "@antv/g-canvas": "^0.4.2",
     "@umijs/preset-react": "1.x",
     "@umijs/test": "^3.0.18",
+    "antd": "^4.1.1",
     "dayjs": "^1.8.23",
+    "father": "^2.29.2",
     "lint-staged": "^10.0.7",
     "prettier": "^1.19.1",
     "react": "^16.12.0",

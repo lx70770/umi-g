@@ -9,9 +9,14 @@ interface CanvasCfg extends Canvas {
   }
 }
 
-export function drawScale(canvas: CanvasCfg, onSliderChange: Function): void {
+export function drawScale(
+  canvas: CanvasCfg,
+  onSliderChange: Function,
+  config: Slider.Config,
+): void {
   const { cfg } = canvas
   const { height, width } = cfg
+  const { strokeColor, textColor } = config
 
   // 画最上面底线
   canvas.addShape('line', {
@@ -20,7 +25,7 @@ export function drawScale(canvas: CanvasCfg, onSliderChange: Function): void {
       y1: 0,
       x2: width,
       y2: 0,
-      stroke: '#222',
+      stroke: strokeColor,
       lineWidth: 1,
     },
   })
@@ -42,7 +47,7 @@ export function drawScale(canvas: CanvasCfg, onSliderChange: Function): void {
           y1: 0,
           x2: interval * i,
           y2: (height * 1) / 2,
-          stroke: '#222',
+          stroke: strokeColor,
           lineWidth: 1,
         },
       })
@@ -54,8 +59,7 @@ export function drawScale(canvas: CanvasCfg, onSliderChange: Function): void {
           text: dayjs(startTime + timeInterval * i).format('MM-DD'),
           textAlign: 'center',
           fontSize: 12,
-          fill: 'red',
-          stroke: '#F04864',
+          fill: textColor,
         },
       })
     } else {
@@ -66,7 +70,7 @@ export function drawScale(canvas: CanvasCfg, onSliderChange: Function): void {
           y1: 0,
           x2: interval * i,
           y2: (height * 1) / 4,
-          stroke: '#222',
+          stroke: strokeColor,
           lineWidth: 1,
         },
       })
@@ -74,6 +78,6 @@ export function drawScale(canvas: CanvasCfg, onSliderChange: Function): void {
   }
 
   // 画handler 图片链接 https://gw.alipayobjects.com/zos/rmsportal/QXtfhORGlDuRvLXFzpsQ.png
-
+  // 初始化滑动事件
   initEvent(canvas, onSliderChange, interval)
 }

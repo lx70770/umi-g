@@ -1,51 +1,48 @@
-import React, { SFC, useRef, useEffect } from 'react'
+import React, { SFC, useRef, useEffect, PureComponent } from 'react'
 import { Canvas } from '@antv/g-canvas'
 import { drawScale } from './scale'
-// import config from './config'
+import defaultConfig from './defaultConfig'
 import style from './style.less'
 
-interface AppProps {
-  height: number
-  wrapRef: {
-    current: HTMLDivElement
-  }
-  // onSliderChange: Function
-}
-
-function onSliderChange(left: number, right: number) {
-  console.log('left', left)
-  console.log('right', right)
+interface SliderProps {
+  config: Slider.Config
+  onSliderChange: Function
 }
 
 // let { height, width, bgColor, strokeColor } = config
 
-const App: SFC<AppProps> = props => {
+const Slider: SFC<SliderProps> = props => {
   let canvas: Canvas | null = null
-  const { height = 38 } = props
+  const { config, onSliderChange } = props
+  const finalConfig = { ...defaultConfig, ...config }
+  let { height, width: defaultWidth, autoWidth, bgColor } = finalConfig
   const wrapRef = useRef<HTMLDivElement>(null)
 
-  const onResize = () => {
+  const onResize = (): void => {
     if (canvas && wrapRef.current) {
-      const width = wrapRef.current.offsetWidth
-      canvas.changeSize(width, height)
+      const width = autoWidth ? wrapRef.current.offsetWidth : defaultWidth
+      canvas.changeSize(width!, height)
       canvas.clear()
-      drawScale(canvas as any, onSliderChange)
+      drawScale(canvas as any, onSliderChange, finalConfig)
     }
   }
 
   useEffect(() => {
     if (wrapRef.current) {
       const container = wrapRef.current
-      const width = wrapRef.current.offsetWidth
+      const width = autoWidth ? wrapRef.current.offsetWidth : defaultWidth
       canvas = new Canvas({
         container,
-        width,
+        width: width!,
         height,
       })
-      drawScale(canvas as any, onSliderChange)
+      drawScale(canvas as any, onSliderChange, finalConfig)
     }
     return () => {
-      canvas = null
+      if (canvas) {
+        canvas.clear()
+        canvas = null
+      }
     }
   }, [])
 
@@ -56,7 +53,13 @@ const App: SFC<AppProps> = props => {
     }
   }, [])
 
-  return <div ref={wrapRef} className={style.wrap} style={{ height }} />
+  return (
+    <div
+      ref={wrapRef}
+      className={style.wrap}
+      style={{ height, backgroundColor: bgColor }}
+    />
+  )
 }
 
-export default App
+export default Slider
