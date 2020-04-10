@@ -1,23 +1,26 @@
-import { Canvas } from '@antv/g-canvas'
 import dayjs from 'dayjs'
 import initEvent from './event'
 
-interface CanvasCfg extends Canvas {
-  cfg: {
-    height: number
-    width: number
-  }
-}
-
 export function drawScale(
-  canvas: CanvasCfg,
+  canvas: Slider.CanvasCfg,
   onSliderChange: Function,
-  config: Slider.Config,
+  config: Slider.formattedConfig,
 ): void {
   const { cfg } = canvas
   const { height, width } = cfg
-  const { strokeColor, textColor } = config
+  const { strokeColor, bgColor, textColor, startTime, endTime } = config
 
+  // 画背景
+  canvas.addShape('rect', {
+    attrs: {
+      x: 0,
+      y: 0,
+      width,
+      height,
+      fill: bgColor,
+      lineWidth: 0,
+    },
+  })
   // 画最上面底线
   canvas.addShape('line', {
     attrs: {
@@ -30,10 +33,6 @@ export function drawScale(
     },
   })
   // 画刻度  根据宽度计算出刻度条数
-  const startTime = 1586328971480 - 604800000
-  const endTime = 1586328971480
-  //   console.log(dayjs(startTime).format('MM-DD'))
-  //   console.log(dayjs(endTime).format('MM-DD'))
   const diff = Math.ceil(dayjs(endTime).diff(startTime, 'day', false))
   const maxInterval = width / diff
   const interval = maxInterval / 12
@@ -56,7 +55,7 @@ export function drawScale(
           x: interval * i,
           y: (height * 1) / 2 + 16,
           fontFamily: 'PingFang SC',
-          text: dayjs(startTime + timeInterval * i).format('MM-DD'),
+          text: dayjs(startTime + timeInterval * i).format('MM-DD HH:mm'),
           textAlign: 'center',
           fontSize: 12,
           fill: textColor,
@@ -79,5 +78,5 @@ export function drawScale(
 
   // 画handler 图片链接 https://gw.alipayobjects.com/zos/rmsportal/QXtfhORGlDuRvLXFzpsQ.png
   // 初始化滑动事件
-  initEvent(canvas, onSliderChange, interval)
+  initEvent(canvas, onSliderChange, interval, config)
 }
